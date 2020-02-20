@@ -1,12 +1,41 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
+import axios from 'axios';
 import "./App.css";
+import Loading from './components/Loading';
+import PicOfTheDay from './components/PicOfTheDay';
 
-function App() {
+  function App() {
+    const [date, setDate] = useState();
+    const [title, setTitle] = useState();
+    const [url, setUrl] = useState();
+    const [explanation, setExplanation] = useState();
+    // const [copyright, setCopyright] = useState();
+  
+    useEffect (() => {
+      axios.get(`https://api.nasa.gov/planetary/apod?api_key=OYB9iH2UyhXcplnYm1eMwAi6CRMi30yyTEKOpd99`)
+        .then (response => {
+          console.log(response.data);
+          setDate(response.data.date);
+          setTitle(response.data.title);
+          setUrl(response.data.url);
+          setExplanation(response.data.explanation);
+          // setCopyright(response.data.copyright);
+        })
+        .catch(err => console.log(err));
+    }, []);
+  
+      if (!url) return <Loading />;
   return (
     <div className="App">
       <p>
-        Read through the instructions in the README.md file to build your NASA
-        app! Have fun 🚀!
+        {/* {<Loading />} */}
+        <PicOfTheDay
+        date={date}
+        title={title}
+        url={url}
+        explanation={explanation}
+        // copyright={copyright}
+        />
       </p>
     </div>
   );
